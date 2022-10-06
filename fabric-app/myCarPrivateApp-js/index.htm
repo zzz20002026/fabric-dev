@@ -1,0 +1,451 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Car測試範例</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="/js/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+    <script type="text/javascript">        
+        
+        //查詢基本資料
+        function queryActivity() {  
+            const txtCarId = $('#txtCarID_1').val();
+
+            const params = {
+                carID: txtCarId
+            }
+
+            //$.post("http://127.0.0.1:8066/queryCar", params, function (data) {
+            $.post("./queryCar", params, function (data) {
+                if (data) {
+                    $('#divData_1').html("");
+                    $('#divData_1').html(data);
+                    $("#txtData_1").val = data;
+                }
+            });
+        }
+
+        //查詢價格
+        function queryPriceActivity() {
+            const txtCarId = $('#txtCarID_1').val();
+
+            const params = {
+                carID: txtCarId
+            }
+
+            $.post("./queryCarPrice", params, function (data) {
+                if (data) {
+                    $('#divData_1').html("");
+                    $('#divData_1').html(data);
+                    $("#txtData_1").val = data;
+                }
+            });
+        }
+
+        //查詢製造日期
+        function queryMfgActivity() {
+            const txtCarId = $('#txtCarID_1').val();
+
+            const params = {
+                carID: txtCarId
+            }
+
+            $.post("./queryCarMFGDate", params, function (data) {
+                if (data) {
+                    $('#divData_1').html("");
+                    $('#divData_1').html(data);
+                    $("#txtData_1").val = data;
+                }
+            });
+        }
+
+        function createActivity() {
+            const txtCarId = $('#txtCarID_2').val();
+            const txtCarBrand = $('#txtCarBrand_2').val();
+            const txtCarModel = $('#txtCarModel_2').val();
+            const txtCarColor = $('#txtCarColor_2').val();
+            const txtCarOwner = $('#txtCarOwner_2').val();
+            const txtCarPrice = $('#txtCarPrice_2').val();
+            const txtCarMfgDate = $('#txtCarMfgDate_2').val();
+
+            const params = {
+                carID: txtCarId,
+                carBrand: txtCarBrand,
+                carModel: txtCarModel,
+                carColor: txtCarColor,
+                carOwner: txtCarOwner,
+                carPrice: txtCarPrice,
+                carMfgDate: txtCarMfgDate
+            }
+
+            $.post("./createCar", params, function (data) {
+                if (data) {
+                    $('#divData_2').html("");
+                    $('#divData_2').html(data);
+                }
+            });
+        }
+
+        function transferActivity() {
+            const txtCarId = $('#txtCarID_3').val();
+            const txtCarNewOwner = $('#txtCarNewOwner_3').val();
+
+            const params = {
+                carID: txtCarId,
+                carNewOwner: txtCarNewOwner
+            }
+
+            $.post("./transferCar", params, function (data) {
+                if (data) {
+                    $('#divData_3').html("");
+                    $('#divData_3').html(data);
+                }
+            });
+        }
+
+        function updatePriceActivity(){
+            const txtCarId = $('#txtCarID_31').val();
+            const txtCarNewPrice = $('#txtCarNewPrice_31').val();
+
+            const params = {
+                carID: txtCarId,
+                carNewPrice: txtCarNewPrice
+            }
+
+            $.post("./updateCarPrice", params, function (data) {
+                if (data) {
+                    $('#divData_31').html("");
+                    $('#divData_31').html(data);
+                }
+            });
+        }
+
+        function deleteActivity(){
+            const txtCarId = $('#txtCarID_4').val();
+
+            const params = {
+                carID: txtCarId
+            }
+
+            $.post("./deleteCar", params, function (data) {
+                if (data) {
+                    $('#divData_4').html("");
+                    $('#divData_4').html(data);
+                }
+            });
+        }
+
+        function queryByRangeActivity(){
+            const txtStartCarId = $('#txtStartCarID_5').val();
+            const txtEndCarId = $('#txtEndCarID_5').val();
+
+            const params = {
+                startCarID: txtStartCarId,
+                endCarID: txtEndCarId
+            }
+
+            $.post("./queryCarPriceByRange", params, function (data) {
+                if (data) {
+                    $('#divData_5').html("");
+                    $('#divData_5').html(data);
+                }
+            });
+        }
+
+        function queryAllActivity(){
+            $.post("./queryAllCarPrice", function (data) {
+                if (data) {
+                    $('#divData_5').html("");
+                    $('#divData_5').html(data);
+                }
+            });
+        }
+
+        function queryByPriceActivity(){
+            const txtCarPrice = $('#txtCarPrice_5').val();
+
+            const params = {
+                carPrice: txtCarPrice
+            }
+
+            $.post("./queryCarByPrice", params, function (data) {
+                if (data) {
+                    $('#divData_5').html("");
+                    $('#divData_5').html(data);
+                }
+            });
+        }
+
+        function queryHistoryActivity(){
+            const txtCarId = $('#txtCarID_5').val();
+
+            const params = {
+                carID: txtCarId
+            }
+
+            $.post("./queryCarHistory", params, function (data) {
+                if (data) {
+                    $('#divData_5').html("");
+                    $('#divData_5').html(data);
+                }
+            });
+        }
+    </script>
+</head>
+
+<body style="padding-top:60px;">
+    <!--導覽列-->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top" style="background-color: #fc9">
+        <a class="navbar-brand" href="#">Car測試範例</a>
+        <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"> <span
+            class="navbar-toggler-icon"></span> </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item"> <a class="nav-link" href="#">...</a> </li>
+            <li class="nav-item"> <a class="nav-link" href="#">...</a> </li>
+            <li class="nav-item"> <a class="nav-link" href="#">...</a> </li>
+          </ul>
+        </div> -->
+    </nav>
+    <!--內容-->
+    <div class="container-fluid">
+        <!-- tab list -->
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="tab1-tab" data-toggle="tab" href="#tab1" role="tab" aria-controls="tab1"
+                    aria-selected="true">Query Car</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="tab2-tab" data-toggle="tab" href="#tab2" role="tab" aria-controls="tab2"
+                    aria-selected="true">Create Car</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="tab3-tab" data-toggle="tab" href="#tab3" role="tab" aria-controls="tab3"
+                    aria-selected="true">Update Car Owner</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="tab31-tab" data-toggle="tab" href="#tab31" role="tab" aria-controls="tab31"
+                    aria-selected="true">Update Car Price</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="tab4-tab" data-toggle="tab" href="#tab4" role="tab" aria-controls="tab4"
+                    aria-selected="true">Delete Car</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="tab5-tab" data-toggle="tab" href="#tab5" role="tab" aria-controls="tab5"
+                    aria-selected="true">Query Car Plus</a>
+            </li>
+        </ul>
+        <!-- tab content -->
+        <div class="tab-content" id="myTabContent">
+            <!-- Query Car  -->
+            <div class="tab-pane fade show active mt-3" id="tab1" role="tabpanel" aria-labelledby="tab1-tab">
+                <form id="form1" class="form-horizontal" role="form">
+                    <div class="form-group form-row align-items-center">
+                        <div class="col-form-label col-auto text-right">Car ID</div>
+                        <div class="col-auto input-group-append">
+                            <input type="text" class="form-control" id="txtCarID_1" value="" required />
+                        </div>
+                    </div>
+                    <div class="form-group form-row align-items-center justify-content-center">
+                        <div class="col-auto input-group-append">
+                            <button name="btnQueryAct" id="btnQueryAct" type="button" class="btn btn-primary"
+                                onclick="queryActivity()">查詢基本資料</button>
+                        </div>
+                        <div class="col-auto input-group-append">
+                            <button name="btnQueryPriceAct" id="btnQueryPriceAct" type="button" class="btn btn-primary"
+                                onclick="queryPriceActivity()">查詢價格</button>
+                        </div>
+                        <div class="col-auto input-group-append">
+                            <button name="btnQueryMfgAct" id="btnQueryMfgAct" type="button" class="btn btn-primary"
+                                onclick="queryMfgActivity()">查詢製造日期</button>
+                        </div>
+                    </div>
+                </form>                
+                <div id="divData_1" class="alert alert-success" role="alert"></div>
+            </div>
+            <!-- Create Car  -->
+            <div class="tab-pane fade show mt-3" id="tab2" role="tabpanel" aria-labelledby="tab2-tab">
+                <form id="form2" class="form-horizontal" role="form">
+                    <div class="form-group form-row align-items-center">
+                        <div class="col-form-label col-auto text-right">Car ID</div>
+                        <div class="col-auto input-group-append">
+                            <input type="text" class="form-control" id="txtCarID_2" value="" required />
+                        </div>
+                    </div>
+                    <div class="form-group form-row align-items-center">
+                        <div class="col-form-label col-auto text-right">Brand</div>
+                        <div class="col-auto input-group-append">
+                            <input type="text" class="form-control" id="txtCarBrand_2" value="" required />
+                        </div>
+                    </div>
+                    <div class="form-group form-row align-items-center">
+                        <div class="col-form-label col-auto text-right">Model</div>
+                        <div class="col-auto input-group-append">
+                            <input type="text" class="form-control" id="txtCarModel_2" value="" required />
+                        </div>
+                    </div>
+                    <div class="form-group form-row align-items-center">
+                        <div class="col-form-label col-auto text-right">Color</div>
+                        <div class="col-auto input-group-append">
+                            <input type="text" class="form-control" id="txtCarColor_2" value="" required />
+                        </div>
+                    </div>
+                    <div class="form-group form-row align-items-center">
+                        <div class="col-form-label col-auto text-right">Owner</div>
+                        <div class="col-auto input-group-append">
+                            <input type="text" class="form-control" id="txtCarOwner_2" value="" required />
+                        </div>
+                    </div>
+                    <div class="form-group form-row align-items-center">
+                        <div class="col-form-label col-auto text-right">Price</div>
+                        <div class="col-auto input-group-append">
+                            <input type="text" class="form-control" id="txtCarPrice_2" value="" required />
+                        </div>
+                    </div>
+                    <div class="form-group form-row align-items-center">
+                        <div class="col-form-label col-auto text-right">MFG.Date</div>
+                        <div class="col-auto input-group-append">
+                            <input type="text" class="form-control" id="txtCarMfgDate_2" value="" required />
+                        </div>
+                    </div>
+                    <div class="form-group form-row align-items-center justify-content-center">
+                        <div class="col-auto input-group-append">
+                            <button name="btnCreateAct" id="btnCreateAct" type="button" class="btn btn-primary"
+                                onclick="createActivity()">確定</button>
+                        </div>
+                    </div>
+                </form>
+                <div id="divData_2" class="alert alert-success" role="alert"></div>
+            </div>
+        
+            <!-- Transfer Asset Owner -->
+            <div class="tab-pane fade show mt-3" id="tab3" role="tabpanel" aria-labelledby="tab3-tab">
+                <form id="form3" class="form-horizontal" role="form">
+                    <div class="form-group form-row align-items-center">
+                        <div class="col-form-label col-auto text-right">Car ID</div>
+                        <div class="col-auto input-group-append">
+                            <input type="text" class="form-control" id="txtCarID_3" value="" required />
+                        </div>
+                    </div>
+                    <div class="form-group form-row align-items-center">
+                        <div class="col-form-label col-auto text-right">New Owner</div>
+                        <div class="col-auto input-group-append">
+                            <input type="text" class="form-control" id="txtCarNewOwner_3" value="" required />
+                        </div>
+                    </div>
+                    <div class="form-group form-row align-items-center justify-content-center">
+                        <div class="col-auto input-group-append">
+                            <button name="btnUpdateAct" id="btnUpdateAct" type="button" class="btn btn-primary"
+                                onclick="transferActivity()">確定</button>
+                        </div>
+                    </div>
+                </form>
+                <div id="divData_3" class="alert alert-success" role="alert"></div>
+            </div>
+
+            <!-- Update Asset Price -->
+            <div class="tab-pane fade show mt-3" id="tab31" role="tabpanel" aria-labelledby="tab31-tab">
+                <form id="form31" class="form-horizontal" role="form">
+                    <div class="form-group form-row align-items-center">
+                        <div class="col-form-label col-auto text-right">Car ID</div>
+                        <div class="col-auto input-group-append">
+                            <input type="text" class="form-control" id="txtCarID_31" value="" required />
+                        </div>
+                    </div>
+                    <div class="form-group form-row align-items-center">
+                        <div class="col-form-label col-auto text-right">New Price</div>
+                        <div class="col-auto input-group-append">
+                            <input type="text" class="form-control" id="txtCarNewPrice_31" value="" required />
+                        </div>
+                    </div>
+                    <div class="form-group form-row align-items-center justify-content-center">
+                        <div class="col-auto input-group-append">
+                            <button name="btnUpdatePriceAct" id="btnUpdatePriceAct" type="button" class="btn btn-primary"
+                                onclick="updatePriceActivity()">確定</button>
+                        </div>
+                    </div>
+                </form>
+                <div id="divData_31" class="alert alert-success" role="alert"></div>
+            </div>
+
+            <!-- Delete Car  -->
+            <div class="tab-pane fade show mt-4" id="tab4" role="tabpanel" aria-labelledby="tab4-tab">
+                <form id="form4" class="form-horizontal" role="form">
+                    <div class="form-group form-row align-items-center">
+                        <div class="col-form-label col-auto text-right">Car ID</div>
+                        <div class="col-auto input-group-append">
+                            <input type="text" class="form-control" id="txtCarID_4" value="" required />
+                        </div>
+                    </div>
+                    <div class="form-group form-row align-items-center justify-content-center">
+                        <div class="col-auto input-group-append">
+                            <button name="btnDeleteAct" id="btnDeleteeAct" type="button" class="btn btn-primary"
+                                onclick="deleteActivity()">確定</button>
+                        </div>
+                    </div>
+                </form>
+                <div id="divData_4" class="alert alert-success" role="alert"></div>
+            </div>
+            <!-- Query Car Plus -->
+            <div class="tab-pane fade show mt-4" id="tab5" role="tabpanel" aria-labelledby="tab5-tab">
+                <form id="form5" class="form-horizontal" role="form">
+                    <div class="form-group form-row align-items-center">
+                        <div class="col-form-label col-auto text-right">Start Car ID</div>
+                        <div class="col-auto input-group-append">
+                            <input type="text" class="form-control" id="txtStartCarID_5" value="" required />
+                        </div>
+                    </div>
+                    <div class="form-group form-row align-items-center">
+                        <div class="col-form-label col-auto text-right">End Car ID</div>
+                        <div class="col-auto input-group-append">
+                            <input type="text" class="form-control" id="txtEndCarID_5" value="" required />
+                        </div>
+                    </div>
+                    <div class="form-group form-row align-items-center justify-content-center">
+                        <div class="col-auto input-group-append">
+                            <button name="btnQueryByRangeAct" id="btnQueryByRangeAct" type="button" class="btn btn-primary"
+                                onclick="queryByRangeActivity()">查詢特定範圍車輛價格</button>
+                        </div>
+                        <div class="col-auto input-group-append">
+                            <button name="btnQueryAllAct" id="btnQueryAllAct" type="button" class="btn btn-primary"
+                                onclick="queryAllActivity()">查詢全部車輛價格</button>
+                        </div>
+                    </div>
+                    <div class="form-group form-row align-items-center">
+                        <div class="col-form-label col-auto text-right">Price</div>
+                        <div class="col-auto input-group-append">
+                            <input type="text" class="form-control" id="txtCarPrice_5" value="" required />
+                        </div>
+                    </div>
+                    <div class="form-group form-row align-items-center justify-content-center">
+                        <div class="col-auto input-group-append">
+                            <button name="btnQueryByPriceAct" id="btnQueryByPriceAct" type="button" class="btn btn-primary"
+                                onclick="queryByPriceActivity()">查詢特定價格車輛</button>
+                        </div>
+                    </div>
+                    <div class="form-group form-row align-items-center">
+                        <div class="col-form-label col-auto text-right">Car ID</div>
+                        <div class="col-auto input-group-append">
+                            <input type="text" class="form-control" id="txtCarID_5" value="" required />
+                        </div>
+                    </div>
+                    <div class="form-group form-row align-items-center justify-content-center">
+                        <div class="col-auto input-group-append">
+                            <button name="btnQueryHistoryAct" id="btnQueryHistoryAct" type="button" class="btn btn-primary"
+                                onclick="queryHistoryActivity()">查詢帳本資料</button>
+                        </div>
+                    </div>
+                </form>
+                <div id="divData_5" class="alert alert-success" role="alert"></div>
+            </div>
+        </div>
+    </div>
+    
+</body>
+
+</html>
