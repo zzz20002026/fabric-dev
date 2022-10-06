@@ -29,13 +29,14 @@ const enrollID = "admin";
 const enrollSecret = "adminpw";
 const identityLabel = "admin";
 
-
+// 設定讀取Gateway Connection Profile: connection.json
 const ccpPath = path.resolve(__dirname, connectionProfile);
 const ccpJSON = fs.readFileSync(ccpPath, 'utf8');
 const ccp = JSON.parse(ccpJSON);
 
 async function main() {
     try {
+
         // Create a new CA client for interacting with the CA.
         const caInfo = ccp.certificateAuthorities[caServer];
 
@@ -43,10 +44,13 @@ async function main() {
         const caClient = new FabricCAServices(caInfo.url);
 
         //for Fabric Dev Network
+        // 依據Connection Profile建立CA Client
+        //const caInfo = ccp.certificateAuthorities['ca.org1.example.com'];
         //const caTLSCACerts = caInfo.tlsCACerts.pem;
         //const caClient = new FabricCAServices(caInfo.url, {trustedRoots: caTLSCACerts, verify: false}, caInfo.caName);
         
         // Create a new file system based wallet for managing identities.
+        // 指定存放憑證的Wallet目錄路徑
         const walletPath = path.join(process.cwd(), 'wallet', orgName);
         const wallet = await Wallets.newFileSystemWallet(walletPath);
         console.log(`Wallet path: ${walletPath}`);
@@ -59,8 +63,10 @@ async function main() {
         }
 
         // Enroll the admin user, and import the new identity into the wallet.
+        // 連線CA Server並登錄admin帳號
         const enrollment = await caClient.enroll({ enrollmentID: enrollID, enrollmentSecret: enrollSecret });
         
+        // 設定憑證內容
         const identity = {
 			credentials: {
 				certificate: enrollment.certificate,
@@ -70,6 +76,7 @@ async function main() {
 			type: 'X.509',
 		};
 
+        // 匯出憑證至Wallet
         await wallet.put(identityLabel, identity);
         console.log(`Successfully enrolled admin user ${identityLabel} and imported it into the wallet`);
 

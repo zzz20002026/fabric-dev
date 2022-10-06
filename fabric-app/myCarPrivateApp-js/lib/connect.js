@@ -20,6 +20,7 @@ const channelName = "dev-channel";
 const contrcatName = "mycar";
 
 //const ccpPath = path.resolve(__dirname, 'connection.json');
+// 設定讀取Getway Connection Profile: connection.json
 const ccpPath = path.resolve(__dirname, '..', connectionProfile);
 const ccpJSON = fs.readFileSync(ccpPath, 'utf8');
 const ccp = JSON.parse(ccpJSON);
@@ -69,6 +70,7 @@ function showTransactionData(transactionData) {
 async function main(funcName, args) {
     try {
         // Create a new file system based wallet for managing identities.
+        // 指定存放憑證的Wallet目錄路徑
         const walletPath = path.join(process.cwd(), 'wallet', orgName);
         const wallet = await Wallets.newFileSystemWallet(walletPath);
         //console.log(`Wallet path: ${walletPath}`);
@@ -83,6 +85,7 @@ async function main(funcName, args) {
         }
 
         // Create a new gateway for connecting to our peer node.
+        // // 建立gateway用以連線節點
         const gateway = new Gateway();
         await gateway.connect(ccp, {
             wallet,
@@ -94,13 +97,16 @@ async function main(funcName, args) {
 
         // Get the network (channel) our contract is deployed to.
         //const network = await gateway.getNetwork('dev-channel');
+        // 存取已部屬智慧合約的Channel
         const network = await gateway.getNetwork(channelName);
 
         // Get the contract from the network.
         //const contract = network.getContract('myasset');
+        // 從Channel取得智慧合約
         const contract = network.getContract(contrcatName);
 
         // setup receive event
+        // 設定監聽器用以訂閱智慧合約事件(Event)廣播
         let listener;
         let blockListener; 
 
@@ -108,14 +114,17 @@ async function main(funcName, args) {
             // create a contract listener
             listener = async (event) => {
 
+                // 讀取Event回傳的資料
                 const eventPlayload = JSON.parse(event.payload.toString('utf8'));
                 //console.log(`Contract Event Received: ${event.eventName} - ${JSON.stringify(eventPlayload)}`);
                 console.log(`*** Contract Event Received ***`);
                 console.log(`*** Event: ${event.eventName}, Playload: ${JSON.stringify(eventPlayload)}`);
 
+                // 讀取Transaction Event
                 const eventTransaction = event.getTransactionEvent();
                 console.log(`*** transaction: ${eventTransaction.transactionId}, status:${eventTransaction.status}`);
 
+                // 讀取Block Event
                 const eventBlock = eventTransaction.getBlockEvent();
                 console.log(`*** block: ${eventBlock.blockNumber.toString()}`);
                 console.log(``);
@@ -123,6 +132,7 @@ async function main(funcName, args) {
             };
 
             console.log(`### Start contract event stream to peer in Org1`);
+            // 加入合約監聽器
             await contract.addContractListener(listener);
         } catch (eventError) {
             console.error(`Failed: Setup contract events - ${eventError}`);
@@ -187,6 +197,7 @@ async function main(funcName, args) {
             case "queryCar":
                 carId = args[0];
                 console.log(`evaluateTransaction for chaincode readMyCar`);
+                // 以evaluate Transaction調用智慧合約
                 resResult = await contract.evaluateTransaction("readMyCar", carId);
                 break;
                 
@@ -269,6 +280,7 @@ async function main(funcName, args) {
 
                 //submit transaction
                 resResult = await deleteCarTx.submit(carId);
+                // 以submit Transaction調用智慧合約
                 //resResult = await contract.submitTransaction("deleteMyCar", carId);
                 break;
 
@@ -304,6 +316,7 @@ async function main(funcName, args) {
 		network.removeBlockListener(blockListener);
         
         // Disconnect from the gateway.
+        // 與節點中斷連線
         //gateway.disconnect();
 
         //當智慧合約發生錯誤正確作法應回傳狀態碼500
@@ -344,7 +357,7 @@ module.exports = {
 */
     executeChaincode: function (funcName, args) {
         return main(funcName, args).then(function (rs) {
-
+            // 回傳智慧合約執行結果
             return rs;
         });
     }
